@@ -11,6 +11,68 @@ library(ggplot2)
 library(rvest)
 library(broom)
 library(purrr)
+library(p8105.datasets)
 set.seed(1)
 ```
+
+#Question 2 
+
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2022-01-01",
+    date_max = "2022-12-31") |>
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) |>
+  select(name, id, everything())
+```
+
+```{r}
+fit = lm(tmax ~ tmin + prcp, data = weather_df)
+
+
+boot_sample = function(df) {
+  sample_frac(df, replace = TRUE)
+}
+
+boot_straps = 
+  tibble(strap_number = 1:5000) |> 
+  mutate(
+    strap_sample = map(strap_number, ~boot_sample(df = weather_df))
+  )
+
+boot_straps |> 
+  slice(1:3) |> 
+  mutate(strap_sample = map(strap_sample, arrange, tmin)) |> 
+  pull(strap_sample)
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
