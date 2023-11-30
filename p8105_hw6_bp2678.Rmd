@@ -1,0 +1,16 @@
+---
+title: "p8105_hw6_bp2678"
+author: "Brady Pham"
+date: 2023-11-30
+output: github_document
+---
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(rvest)
+library(broom)
+library(purrr)
+set.seed(1)
+```
+
